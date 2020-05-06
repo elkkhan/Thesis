@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="390.0" prefWidth="283.0" stylesheets="@learning.css" xmlns="http://javafx.com/javafx/9.0.4" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.thesis.neptun.controller.ModifyCourseController">
+   <children>
+      <ImageView fitHeight="59.0" fitWidth="59.0" layoutX="112.0" layoutY="14.0">
+         <image>
+            <Image url="@img/elte.png" />
+         </image>
+      </ImageView>
+      <TextField fx:id="nameModify" layoutX="58.0" layoutY="126.0" promptText="Name" />
+      <TextField fx:id="codeModify" layoutX="58.0" layoutY="171.0" promptText="Course code" />
+      <TextField fx:id="creditModify" layoutX="58.0" layoutY="214.0" promptText="Number of credits" />
+      <TextField fx:id="startTimeModify" layoutX="58.0" layoutY="260.0" promptText="Start time" />
+      <Label alignment="CENTER" layoutX="75.0" layoutY="89.0" prefHeight="28.0" prefWidth="133.0" text="Modifying Course" />
+      <Button layoutX="116.0" layoutY="349.0" mnemonicParsing="false" onAction="#handleSaveButtonAction" stylesheets="@learning.css" text="Save" />
+      <TextField fx:id="timeoutMinutes" layoutX="52.0" layoutY="303.0" prefHeight="28.0" prefWidth="173.0" promptText="Attendance timeout (minutes)" />
+   </children>
+</AnchorPane>

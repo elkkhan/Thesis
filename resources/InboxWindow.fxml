@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="412.0" prefWidth="600.0" stylesheets="@learning.css" xmlns="http://javafx.com/javafx/9.0.4" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.thesis.neptun.controller.InboxWindowController">
+   <children>
+      <TableView fx:id="tableView" layoutX="13.0" layoutY="93.0" prefHeight="292.0">
+        <columns>
+          <TableColumn fx:id="sender" prefWidth="164.0" text="Sender" />
+          <TableColumn fx:id="subject" prefWidth="241.0" text="Subject" />
+            <TableColumn fx:id="date" prefWidth="168.0" text="Date" />
+        </columns>
+      </TableView>
+      <ImageView fitHeight="77.0" fitWidth="83.0" layoutX="259.0" layoutY="6.0">
+         <image>
+            <Image url="@img/elte.png" />
+         </image>
+      </ImageView>
+      <Button layoutX="502.0" layoutY="25.0" mnemonicParsing="false" onAction="#handleComposeButtonAction" text="Compose" />
+      <Button layoutX="24.0" layoutY="25.0" mnemonicParsing="false" onAction="#handleBackButtonAction" prefHeight="27.0" prefWidth="60.0" text="Back" />
+   </children>
+</AnchorPane>

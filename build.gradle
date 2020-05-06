@@ -1,0 +1,32 @@
+plugins {
+    id 'java'
+}
+
+group 'com.elte.neptun'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.eclipse.persistence:eclipselink:2.5.0'
+    compile 'mysql:mysql-connector-java:8.0.18'
+}
+
+sourceSets {
+    main.java.srcDirs('src/','metamodel/')
+    main.resources.srcDirs('resources/')
+}
+
+jar {
+    manifest {
+        attributes "Main-Class": "com.thesis.neptun.main.MainWindow"
+    }
+
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
