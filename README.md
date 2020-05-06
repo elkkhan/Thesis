@@ -45,4 +45,5 @@ Predefined users in the database that can be used for testing:
 MySQL is used for all of the backend. 
 It is stored on a free-tier AWS EC2, so the connection might be slow.
 To change the backend database, edit JDBC related entries in **resources/persistence.xml**
+
 **com.thesis.neptun.main.DatabaseFiller** class can be used to initialize tables with sample data
