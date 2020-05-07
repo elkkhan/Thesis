@@ -1,11 +1,8 @@
 package com.thesis.neptun.controller;
 
 import com.thesis.neptun.main.MainWindow;
-import com.thesis.neptun.model.Student;
-import com.thesis.neptun.model.Teacher;
 import com.thesis.neptun.model.User;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.TimeZone;
@@ -18,7 +15,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 
 public class SearchResultsController implements Initializable {
 
@@ -54,27 +50,16 @@ public class SearchResultsController implements Initializable {
 
   private List<User> getSearchResults(EntityManager em, String receiverData) {
     String query =
-        "select id from user where (name like \"%"
+        "select * from user where (name like \"%"
             + receiverData
             + "%\" or email like \"%"
             + receiverData
             + "%\" or code like \"%"
             + receiverData
-            + "%\")";
-    List<Integer> matchedIds = em.createNativeQuery(query).getResultList();
-    List<User> matchedUsers = new ArrayList<>();
-    for (Integer id : matchedIds) {
-      User user;
-      try {
-        user = (User) em.find(Student.class, id);
-      } catch (NoResultException e) {
-        user = (User) em.find(Teacher.class, id);
-      }
-      matchedUsers.add(user);
-    }
+            + "%\") and id!="+loggedInUser.getId();
+    List<User> matchedUsers = em.createNativeQuery(query,User.class).getResultList();
     return matchedUsers;
   }
-
 
   public void handleSelectButtonAction() {
     ComposeMessageWindowController.setReceiverData(
