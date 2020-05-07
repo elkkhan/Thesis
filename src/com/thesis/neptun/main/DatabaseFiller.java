@@ -2,7 +2,6 @@ package com.thesis.neptun.main;
 
 import com.thesis.neptun.auth.AuthManager;
 import com.thesis.neptun.model.Course;
-import com.thesis.neptun.model.Message;
 import com.thesis.neptun.model.Result;
 import com.thesis.neptun.model.Student;
 import com.thesis.neptun.model.Teacher;
