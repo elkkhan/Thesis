@@ -1,12 +1,15 @@
 package com.thesis.neptun.model;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -26,7 +29,7 @@ public class Course {
   @ManyToOne
   private Teacher teacher;
   @ManyToMany
-  private List<Student> students = new ArrayList<>();
+  private Set<Student> students = new HashSet<>();
   @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
   private List<ClassLog> classLogs;
   private int credit;
@@ -78,11 +81,11 @@ public class Course {
     this.timeoutMinutes = timeoutMinutes;
   }
 
-  public List<Student> getStudents() {
+  public Set<Student> getStudents() {
     return students;
   }
 
-  public void setStudents(List<Student> students) {
+  public void setStudents(Set<Student> students) {
     this.students = students;
   }
 

@@ -26,6 +26,7 @@
       <Button fx:id="back" layoutX="36.0" layoutY="24.0" mnemonicParsing="false" onAction="#handleBackButtonAction" prefHeight="27.0" prefWidth="60.0" text="Back" />
       <Label fx:id="subjectName" alignment="CENTER" contentDisplay="CENTER" layoutX="152.0" layoutY="119.0" prefHeight="33.0" prefWidth="133.0" text="SUBJECT_NAME" />
       <Button fx:id="open" layoutX="189.0" layoutY="645.0" mnemonicParsing="false" onAction="#handleOpenClasslogButtonAction" prefHeight="27.0" prefWidth="97.0" text="Open classlog" />
-      <Button fx:id="start" layoutX="325.0" layoutY="122.0" mnemonicParsing="false" onAction="#handleStartClassButtonAction" text="Start class" />
+      <Button fx:id="start" layoutX="36.0" layoutY="122.0" mnemonicParsing="false" onAction="#handleStartClassButtonAction" text="Start class" />
+      <Button fx:id="end" layoutX="334.0" layoutY="122.0" mnemonicParsing="false" onAction="#handleEndClassButtonAction" text="End class" />
    </children>
 </AnchorPane>

@@ -25,8 +25,8 @@ import javax.persistence.EntityManager;
 public class ClassLogsController implements Initializable {
 
   private static ClassLog currentClassLog;
-  private Course selectedCourse = TeacherPanelController.getSelectedCourse();
   private static EntityManager em = MainWindow.entityManager;
+  private Course selectedCourse = TeacherPanelController.getSelectedCourse();
   @FXML
   private Label subjectName;
   @FXML
@@ -94,7 +94,6 @@ public class ClassLogsController implements Initializable {
     ClassLog classLog = startClasslog(em, selectedCourse);
     currentClassLog = classLog;
     constructTableView();
-
     int timeoutMinutes = classLog.getCourse().getTimeoutMinutes();
     Thread countDown = new Thread(() -> {
       try {
@@ -111,6 +110,19 @@ public class ClassLogsController implements Initializable {
         "Attendance window will close in " + timeoutMinutes + " minutes.");
     countDown.start();
   }
+
+  @FXML
+  public void handleEndClassButtonAction() {
+    ClassLog classLog = tableView.getSelectionModel().getSelectedItem();
+    if(classLog == null) {
+      NeptunUtils.displayMessage("No selection", "Please select a class.");
+      return;
+    }
+    em.getTransaction().begin();
+    classLog.setAttendanceWindowClosed(true);
+    em.getTransaction().commit();
+    constructTableView();
+}
 
   private ClassLog startClasslog(EntityManager em, Course course) {
     Date date = new Date();

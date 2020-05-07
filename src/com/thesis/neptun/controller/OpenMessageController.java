@@ -53,7 +53,7 @@ public class OpenMessageController implements Initializable {
       stage.setScene(scene);
       stage.setResizable(false);
       ComposeMessageWindowController controller = fxmlLoader.getController();
-      controller.setReplyData(message.getSender().getEmail(), "Re:" + subject.getText());
+      controller.setReplyData(message.getSender(), "Re:" + subject.getText());
       stage.show();
     } catch (Exception e) {
       e.printStackTrace();

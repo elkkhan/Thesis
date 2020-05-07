@@ -107,27 +107,17 @@ public class NeptunUtils {
   }
 
   public static boolean isNeptunUnique(EntityManager em, String neptun) {
-    String neptunStudent = "\"" + neptun.toUpperCase() + "\"";
-    String neptunTeacher = "\"" + neptun.toUpperCase() + "\"";
-
-    String sameNeptunStudents = "select count(code) from student where code=" + neptunStudent;
-    String sameNeptunTeachers = "select count(code) from teacher where code=" + neptunTeacher;
-    long sameNeptunStudentsCount, sameNeptunTeachersCount;
-    sameNeptunStudentsCount = (long) em.createNativeQuery(sameNeptunStudents).getSingleResult();
-    sameNeptunTeachersCount = (long) em.createNativeQuery(sameNeptunTeachers).getSingleResult();
-    return sameNeptunStudentsCount == 0 && sameNeptunTeachersCount == 0;
+    String sameNeptunUsersCountQuery = "select count(code) from user where code=\"" + neptun + "\"";
+    long sameNeptunUsersCount;
+    sameNeptunUsersCount = (long) em.createNativeQuery(sameNeptunUsersCountQuery).getSingleResult();
+    return sameNeptunUsersCount == 0;
   }
 
   public static boolean isEmailUnique(EntityManager em, String email) {
-    String emailStudent = "\"" + email.toUpperCase() + "\"";
-    String emailTeacher = "\"" + email.toUpperCase() + "\"";
-
-    String sameEmailStudents = "select count(email) from student where email=" + emailStudent;
-    String sameEmailTeachers = "select count(email) from teacher where email=" + emailTeacher;
-    long sameEmailStudentsCount, sameEmailTeachersCount;
-    sameEmailStudentsCount = (long) em.createNativeQuery(sameEmailStudents).getSingleResult();
-    sameEmailTeachersCount = (long) em.createNativeQuery(sameEmailTeachers).getSingleResult();
-    return sameEmailStudentsCount == 0 && sameEmailTeachersCount == 0;
+    String sameEmailUsersQuery = "select count(email) from user where email=\"" + email + "\"";
+    long sameEmailUsersCount;
+    sameEmailUsersCount = (long) em.createNativeQuery(sameEmailUsersQuery).getSingleResult();
+    return sameEmailUsersCount == 0;
   }
 
   public static void displayMessage(String title, String context) {
@@ -160,7 +150,8 @@ public class NeptunUtils {
     return isEmpty;
   }
 
-  public static boolean isRegistrationDataValid(EntityManager em, String neptun, char[] password, String email)
+  public static boolean isRegistrationDataValid(EntityManager em, String neptun, char[] password,
+      String email)
       throws RegistrationException {
     if (!NeptunUtils.isValidNeptunCode(neptun)) {
       throw new RegistrationException(

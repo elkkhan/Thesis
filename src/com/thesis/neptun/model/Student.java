@@ -4,16 +4,23 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.persistence.CascadeType;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 
 @Entity
+@DiscriminatorValue("STUDENT")
 public class Student extends User {
 
   private transient String grade = "";
   @ManyToMany(mappedBy = "students")
+  @JoinTable(name = "course_student",
+      joinColumns = @JoinColumn(name = "student_id"),
+      inverseJoinColumns = @JoinColumn(name = "course_id"))
   private Set<Course> courses = new HashSet<>();
   @OneToMany(mappedBy = "student",cascade = CascadeType.ALL)
   private List<AttendanceLog> attendanceLogs;

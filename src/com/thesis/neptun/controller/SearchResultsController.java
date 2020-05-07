@@ -31,7 +31,7 @@ public class SearchResultsController implements Initializable {
   @FXML
   private TableColumn<User, String> emailSearch;
 
-  private String receiverData = ComposeMessageWindowController.getReceiverData();
+  private String receiverData = ComposeMessageWindowController.getReceiverSearchKeyword();
 
   @SuppressWarnings("unchecked")
   @Override
@@ -54,9 +54,7 @@ public class SearchResultsController implements Initializable {
 
   private List<User> getSearchResults(EntityManager em, String receiverData) {
     String query =
-        "select id from (select id, code, name, email  from student union \n"
-            + "select id, code, name, email  from teacher \n"
-            + "order by name) as t where (t.name like \"%"
+        "select id from user where (name like \"%"
             + receiverData
             + "%\" or email like \"%"
             + receiverData
@@ -79,7 +77,7 @@ public class SearchResultsController implements Initializable {
 
 
   public void handleSelectButtonAction() {
-    ComposeMessageWindowController.getBackReceiverData(
+    ComposeMessageWindowController.setReceiverData(
         tableView.getSelectionModel().getSelectedItem());
     ((Stage) tableView.getScene().getWindow()).close();
   }

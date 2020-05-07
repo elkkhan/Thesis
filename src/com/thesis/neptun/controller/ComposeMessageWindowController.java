@@ -20,7 +20,7 @@ import javax.persistence.NoResultException;
 
 public class ComposeMessageWindowController implements Initializable {
 
-  private static String receiverDataText;
+  private static String receiverSearchKeyword;
   private static User receiver;
   private EntityManager em = MainWindow.entityManager;
   private User loggedInUser = MainWindowController.getLoggedInUser();
@@ -31,11 +31,11 @@ public class ComposeMessageWindowController implements Initializable {
   @FXML
   private TextArea message;
 
-  static String getReceiverData() {
-    return receiverDataText;
+  public static String getReceiverSearchKeyword() {
+    return receiverSearchKeyword;
   }
 
-  static void getBackReceiverData(User selectedUser) {
+  static void setReceiverData(User selectedUser) {
     receiver = selectedUser;
   }
 
@@ -54,8 +54,9 @@ public class ComposeMessageWindowController implements Initializable {
     TimeZone.setDefault(TimeZone.getTimeZone("Europe/Budapest"));
   }
 
-  void setReplyData(String receiverDataText, String subjectDataText) {
-    receiverData.setText(receiverDataText);
+  public void setReplyData(User receiver, String subjectDataText) {
+    ComposeMessageWindowController.receiver = receiver;
+    receiverData.setText(receiver.getEmail());
     subject.setText(subjectDataText);
   }
 
@@ -63,7 +64,7 @@ public class ComposeMessageWindowController implements Initializable {
     if (receiverData.getText().isEmpty()) {
       NeptunUtils.displayMessage("Neptun System", "Please enter the receipent name.");
     } else {
-      receiverDataText = receiverData.getText();
+      receiverSearchKeyword = receiverData.getText();
       try {
         TimeZone.setDefault(TimeZone.getTimeZone("Europe/Budapest"));
         Stage stage = new Stage();

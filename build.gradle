@@ -4,8 +4,6 @@ plugins {
 group 'com.elte.neptun'
 version '1.0-SNAPSHOT'
 
-sourceCompatibility = 1.8
-
 repositories {
     mavenCentral()
 }
@@ -23,6 +21,7 @@ sourceSets {
 }
 
 jar {
+    baseName("THESIS")
     manifest {
         attributes "Main-Class": "com.thesis.neptun.main.MainWindow"
     }
