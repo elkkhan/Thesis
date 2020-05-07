@@ -2,6 +2,7 @@ package com.thesis.neptun.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 
@@ -10,7 +11,7 @@ public class Teacher extends User {
 
   private String role;
 
-  @OneToMany(mappedBy = "teacher")
+  @OneToMany(mappedBy = "teacher",cascade = CascadeType.ALL)
   private List<Course> courses = new ArrayList<>();
 
   public Teacher() {
@@ -29,19 +30,6 @@ public class Teacher extends User {
   public void setCourses(List<Course> courses) {
     this.courses = courses;
   }
-
-  //	public String getName() {
-  //		return name;
-  //	}
-  //	public void setName(String name) {
-  //		this.name = name;
-  //	}
-  //	public String getEmail() {
-  //		return email;
-  //	}
-  //	public void setEmail(String email) {
-  //		this.email = email;
-  //	}
 
   @Override
   public String toString() {

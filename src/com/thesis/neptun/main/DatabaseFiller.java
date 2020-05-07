@@ -2,6 +2,7 @@ package com.thesis.neptun.main;
 
 import com.thesis.neptun.auth.AuthManager;
 import com.thesis.neptun.model.Course;
+import com.thesis.neptun.model.Message;
 import com.thesis.neptun.model.Result;
 import com.thesis.neptun.model.Student;
 import com.thesis.neptun.model.Teacher;
@@ -39,7 +40,8 @@ public class DatabaseFiller {
     List<Student> students =
         Arrays.asList(
             auth.registerStudent(
-                "CRIS01", "crismoltesanti@1A".toCharArray(), "Cristopher Moltesanti", "crissy@elte.hu"),
+                "CRIS01", "crismoltesanti@1A".toCharArray(), "Cristopher Moltesanti",
+                "crissy@elte.hu"),
             auth.registerStudent(
                 "JACKY01",
                 "jackyjunior@1A".toCharArray(),
@@ -57,14 +59,14 @@ public class DatabaseFiller {
             new Course("Distributed Systems", "IP-DISTSYS", teachers.get(0), 8, "15:17", 120));
     List<Result> results =
         Arrays.asList(
-            new Result("CRIS01", "IP-ANAL1", 2),
-            new Result("CRIS01", "IP-CPPL2", 5),
-            new Result("CRIS01", "IP-NUMETH45", 3),
-            new Result("CRIS01", "IP-DISTSYS", 5),
-            new Result("JACKY01", "IP-DISCR1", 5),
-            new Result("JACKY01", "IP-ALGO2", 4),
-            new Result("JACKY01", "IP-NUMETH45", 3),
-            new Result("JACKY01", "IP-DISTSYS", 2));
+            new Result(students.get(0), courses.get(0), 2),
+            new Result(students.get(0), courses.get(3), 5),
+            new Result(students.get(0), courses.get(4), 3),
+            new Result(students.get(0), courses.get(6), 5),
+            new Result(students.get(1), courses.get(1), 5),
+            new Result(students.get(1), courses.get(5), 4),
+            new Result(students.get(1), courses.get(4), 3),
+            new Result(students.get(1), courses.get(6), 2));
 
     teachers
         .get(0)

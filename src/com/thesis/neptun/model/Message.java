@@ -1,5 +1,6 @@
 package com.thesis.neptun.model;
 
+import com.thesis.neptun.main.MainWindow;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
@@ -7,8 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.NoResultException;
-import com.thesis.neptun.main.MainWindow;
 
 @Entity
 public class Message {
@@ -16,51 +17,53 @@ public class Message {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
-
-  private String senderEmail, receiverEmail;
-
+  @ManyToOne
+  private User sender;
+  @ManyToOne
+  private User receiver;
   private String date;
-
   private boolean isRead;
-
   private String message, subject;
 
   public Message() {
   }
 
-  public Message(String senderEmail, String receiverEmail, String message, String subject) {
+  public Message(User sender, User receiver, String message, String subject) {
     SimpleDateFormat formatter = new SimpleDateFormat("EEE, MMM d, hh:mm");
     this.date = formatter.format(new Date());
-    this.senderEmail = senderEmail;
-    this.receiverEmail = receiverEmail;
+    this.sender = sender;
+    this.receiver = receiver;
     this.message = message;
     this.subject = subject;
     this.isRead = false;
   }
 
-  public void setIsRead(boolean isRead) {
-    this.isRead = isRead;
+  public User getSender() {
+    return sender;
   }
 
-  public String getSenderName() {
-    TimeZone.setDefault(TimeZone.getTimeZone("Europe/Budapest"));
-    String name;
-    try {
-      name =
-          (String)
-              MainWindow.entityManager
-                  .createNativeQuery(
-                      "select name from student where email =\"" + senderEmail + "\"")
-                  .getSingleResult();
-    } catch (NoResultException e) {
-      name =
-          (String)
-              MainWindow.entityManager
-                  .createNativeQuery(
-                      "select name from teacher where email =\"" + senderEmail + "\"")
-                  .getSingleResult();
-    }
-    return name;
+  public void setSender(User sender) {
+    this.sender = sender;
+  }
+
+  public User getReceiver() {
+    return receiver;
+  }
+
+  public void setReceiver(User receiver) {
+    this.receiver = receiver;
+  }
+
+  public boolean isRead() {
+    return isRead;
+  }
+
+  public void setRead(boolean read) {
+    isRead = read;
+  }
+
+  public void setIsRead(boolean isRead) {
+    this.isRead = isRead;
   }
 
   public int getId() {
@@ -71,12 +74,12 @@ public class Message {
     this.id = id;
   }
 
-  public String getSenderEmail() {
-    return senderEmail;
-  }
-
   public String getDate() {
     return date;
+  }
+
+  public void setDate(String date) {
+    this.date = date;
   }
 
   public String getMessage() {

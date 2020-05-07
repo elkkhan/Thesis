@@ -4,7 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class AttendanceLog {
@@ -12,16 +12,26 @@ public class AttendanceLog {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
-  private String courseCode;
-  private String studentCode;
-  @OneToOne
+
+  @ManyToOne
   private ClassLog classLog;
+  @ManyToOne
+  private Student student;
+
   public AttendanceLog() {
   }
-  public AttendanceLog(ClassLog cl, String courseCode, String studentCode) {
+
+  public AttendanceLog(ClassLog cl, Student student) {
     this.classLog = cl;
-    this.courseCode = courseCode;
-    this.studentCode = studentCode;
+    this.student = student;
+  }
+
+  public Student getStudent() {
+    return student;
+  }
+
+  public void setStudent(Student student) {
+    this.student = student;
   }
 
   public int getId() {
@@ -38,21 +48,5 @@ public class AttendanceLog {
 
   public void setClassLog(ClassLog classLog) {
     this.classLog = classLog;
-  }
-
-  public String getCourseCode() {
-    return courseCode;
-  }
-
-  public void setCourseCode(String courseCode) {
-    this.courseCode = courseCode;
-  }
-
-  public String getStudentCode() {
-    return studentCode;
-  }
-
-  public void setStudentCode(String studentCode) {
-    this.studentCode = studentCode;
   }
 }

@@ -1,13 +1,15 @@
 package com.thesis.neptun.controller;
 
+import com.thesis.neptun.exception.NoRowSelectedException;
 import com.thesis.neptun.main.MainWindow;
+import com.thesis.neptun.model.AttendanceLog;
+import com.thesis.neptun.model.ClassLog;
 import com.thesis.neptun.model.Course;
-import com.thesis.neptun.model.Result;
+import com.thesis.neptun.model.Student;
 import com.thesis.neptun.model.Teacher;
 import com.thesis.neptun.model.User;
+import com.thesis.neptun.util.NeptunUtils;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 import java.util.TimeZone;
 import javafx.collections.FXCollections;
@@ -24,11 +26,13 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import javax.persistence.EntityManager;
 
 public class TeacherPanelController extends MainWindowController implements Initializable {
 
   private static Course selectedCourse;
-  private User loggedInUser = getLoggedInUser();
+  private static EntityManager em = MainWindow.entityManager;
+  private User loggedInUser = MainWindowController.getLoggedInUser();
   @FXML
   private TableView<Course> tableView;
   @FXML
@@ -49,40 +53,22 @@ public class TeacherPanelController extends MainWindowController implements Init
   }
 
   @SuppressWarnings("unchecked")
-  private ObservableList<Course> getCourseList() {
-    ObservableList<Course> courses = FXCollections.observableArrayList();
-    List<Course> courseList =
-        MainWindow.entityManager
-            .createNativeQuery(
-                "select * from course where teacher_id=" + loggedInUser.getId(), Course.class)
-            .getResultList();
-    for (Course x : courseList) {
-      courses.add(x);
-    }
-    return courses;
-  }
-
-  @SuppressWarnings("unchecked")
   @Override
   public void initialize(URL url, ResourceBundle rb) {
+    em.refresh(loggedInUser);
     inboxCounter.setVisible(false);
     TimeZone.setDefault(TimeZone.getTimeZone("Europe/Budapest"));
     subjCode.setCellValueFactory(new PropertyValueFactory<>("courseCode"));
     subjName.setCellValueFactory(new PropertyValueFactory<>("name"));
     subjCredits.setCellValueFactory(new PropertyValueFactory<>("credit"));
     subjStartTime.setCellValueFactory(new PropertyValueFactory<>("startTime"));
-    tableView.setItems(getCourseList());
+    ObservableList<Course> courses = FXCollections.observableArrayList();
+    courses.addAll(((Teacher) loggedInUser).getCourses());
+    tableView.setItems(courses);
     tableView.getColumns().clear();
     tableView.getColumns().addAll(subjCode, subjName, subjCredits, subjStartTime);
     tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-    long count =
-        (long)
-            MainWindow.entityManager
-                .createNativeQuery(
-                    "select count(*) from message where receiverEmail = \""
-                        + loggedInUser.getEmail()
-                        + "\" and isread = 0")
-                .getSingleResult();
+    long count = NeptunUtils.countUnreadEmails(loggedInUser);
     if (count > 0) {
       inboxCounter.setVisible(true);
       inboxCounter.setText(String.valueOf(count));
@@ -92,7 +78,7 @@ public class TeacherPanelController extends MainWindowController implements Init
   @FXML
   public void handleCreateCourseButtonAction(ActionEvent event) {
     ((Stage) createCourse.getScene().getWindow()).close();
-    MainWindow.loadWindow("/CreateCourseWindow.fxml", "Course creator");
+    NeptunUtils.loadWindow("/CreateCourseWindow.fxml", "Course creator");
   }
 
   public void handleModifyCourseButtonAction(ActionEvent event) {
@@ -102,9 +88,9 @@ public class TeacherPanelController extends MainWindowController implements Init
         throw new NullPointerException();
       }
       ((Stage) createCourse.getScene().getWindow()).close();
-      MainWindow.loadWindow("/ModifyCourseWindow.fxml", "Course modifier");
+      NeptunUtils.loadWindow("/ModifyCourseWindow.fxml", "Course modifier");
     } catch (NullPointerException e) {
-      MainWindow.displayMessage("Neptun System", "Please select a subject!");
+      NeptunUtils.displayMessage("Neptun System", "Please select a subject!");
     }
   }
 
@@ -113,7 +99,7 @@ public class TeacherPanelController extends MainWindowController implements Init
     try {
       selectedCourse = tableView.getSelectionModel().getSelectedItem();
       if (selectedCourse == null) {
-        throw new NullPointerException();
+        throw new NoRowSelectedException("Please select a subject!");
       }
       Alert alert =
           new Alert(
@@ -124,38 +110,31 @@ public class TeacherPanelController extends MainWindowController implements Init
       alert.showAndWait();
 
       if (alert.getResult() == ButtonType.YES) {
-        String findCourse =
-            "select id from course where coursecode=\"" + selectedCourse.getCourseCode() + "\"";
-        int courseId =
-            (int) MainWindow.entityManager.createNativeQuery(findCourse).getSingleResult();
-        Course deletedCourse = MainWindow.entityManager.find(Course.class, courseId);
-        MainWindow.entityManager.getTransaction().begin();
-        Teacher teacher = (Teacher) loggedInUser;
-        teacher.getCourses().remove(deletedCourse);
-        MainWindow.entityManager.remove(deletedCourse);
-
-        List<Result> resultsToDelete = new ArrayList<>();
-        String findResult =
-            "select * from Result where coursecode=\"" + selectedCourse.getCourseCode() + "\"";
-        try {
-          resultsToDelete =
-              MainWindow.entityManager.createNativeQuery(findResult, Result.class).getResultList();
-        } catch (Exception e) {
-
-        }
-        for (Result x : resultsToDelete) {
-          MainWindow.entityManager.remove(x);
-        }
-        MainWindow.entityManager.getTransaction().commit();
-
-        MainWindow.displayMessage(
-            "Neptun System", "Course " + deletedCourse.getName() + " successfuly deleted" + ".");
+        deleteCourse(em, selectedCourse);
+        NeptunUtils.displayMessage(
+            "Neptun System", "Course " + selectedCourse.getName() + " successfuly deleted" + ".");
         ((Stage) createCourse.getScene().getWindow()).close();
-        MainWindow.loadWindow("/TeacherPanel.fxml", "Teacher Panel");
+        NeptunUtils.loadWindow("/TeacherPanel.fxml", "Teacher Panel");
       }
-    } catch (NullPointerException e) {
-      MainWindow.displayMessage("Neptun System", "Please select a subject!");
+    } catch (NoRowSelectedException e) {
+      NeptunUtils.displayMessage("Neptun System", e.getMessage());
     }
+  }
+
+  private void deleteCourse(EntityManager em, Course course) throws NoRowSelectedException {
+    em.refresh(course);
+    em.getTransaction().begin();
+    course.getTeacher().getCourses().remove(course);
+    for (Student student : course.getStudents()) {
+      student.getCourses().remove(course);
+    }
+    for (ClassLog cl : course.getClassLogs()) {
+      for (AttendanceLog al : cl.getAttendanceLogs()) {
+        em.remove(al);
+      }
+    }
+    em.remove(course);
+    em.getTransaction().commit();
   }
 
   @FXML
@@ -163,12 +142,12 @@ public class TeacherPanelController extends MainWindowController implements Init
     try {
       selectedCourse = tableView.getSelectionModel().getSelectedItem();
       if (selectedCourse == null) {
-        throw new NullPointerException();
+        throw new NoRowSelectedException("Please select a subject!");
       }
       ((Stage) createCourse.getScene().getWindow()).close();
-      MainWindow.loadWindow("/StudentList.fxml", "Student list");
-    } catch (NullPointerException e) {
-      MainWindow.displayMessage("Neptun System", "Please select a subject!");
+      NeptunUtils.loadWindow("/StudentList.fxml", "Student list");
+    } catch (NoRowSelectedException e) {
+      NeptunUtils.displayMessage("Neptun System", e.getMessage());
     }
   }
 
@@ -177,12 +156,12 @@ public class TeacherPanelController extends MainWindowController implements Init
     try {
       selectedCourse = tableView.getSelectionModel().getSelectedItem();
       if (selectedCourse == null) {
-        throw new NullPointerException();
+        throw new NoRowSelectedException("Please select a subject!");
       }
       ((Stage) createCourse.getScene().getWindow()).close();
-      MainWindow.loadWindow("/ClassLogs.fxml", "Class Logs");
-    } catch (NullPointerException e) {
-      MainWindow.displayMessage("Neptun System", "Please select a subject!");
+      NeptunUtils.loadWindow("/ClassLogs.fxml", "Class Logs");
+    } catch (NoRowSelectedException e) {
+      NeptunUtils.displayMessage("Neptun System", e.getMessage());
     }
   }
 
@@ -190,12 +169,12 @@ public class TeacherPanelController extends MainWindowController implements Init
   public void handleLogOutButtonAction(ActionEvent event) {
     resetLoggedInUser();
     ((Stage) createCourse.getScene().getWindow()).close();
-    MainWindow.loadWindow("/MainWindow.fxml", "sMain");
+    NeptunUtils.loadWindow("/MainWindow.fxml", "sMain");
   }
 
   @FXML
   public void handleInboxButtonAction(ActionEvent event) {
-    MainWindow.loadWindow("/InboxWindow.fxml", "Inbox");
+    NeptunUtils.loadWindow("/InboxWindow.fxml", "Inbox");
     ((Stage) tableView.getScene().getWindow()).close();
   }
 }

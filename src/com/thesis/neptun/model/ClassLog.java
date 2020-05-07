@@ -1,12 +1,14 @@
 package com.thesis.neptun.model;
 
+import java.util.List;
 import javax.persistence.Cacheable;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 @Entity
 @Cacheable(false)
@@ -15,15 +17,18 @@ public class ClassLog {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
-  private String courseCode;
+  @ManyToOne
+  private Course course;
+  @OneToMany(mappedBy = "classLog",cascade = CascadeType.ALL)
+  private List<AttendanceLog> attendanceLogs;
   private String date;
   private boolean attendanceWindowClosed;
 
   public ClassLog() {
   }
 
-  public ClassLog(String courseCode, String date, boolean attendanceWindowClosed) {
-    this.courseCode = courseCode;
+  public ClassLog(Course course, String date, boolean attendanceWindowClosed) {
+    this.course = course;
     this.date = date;
     this.attendanceWindowClosed = attendanceWindowClosed;
   }
@@ -32,7 +37,7 @@ public class ClassLog {
   public String toString() {
     return "ClassLog{" +
         "id=" + id +
-        ", courseCode='" + courseCode + '\'' +
+        ", courseCode='" + course.getCourseCode() + '\'' +
         ", date=" + date +
         ", attendanceWindowClosed=" + attendanceWindowClosed +
         '}';
@@ -54,12 +59,20 @@ public class ClassLog {
     this.attendanceWindowClosed = bool;
   }
 
-  public String getCourseCode() {
-    return courseCode;
+  public Course getCourse() {
+    return course;
   }
 
-  public void setCourseCode(String courseCode) {
-    this.courseCode = courseCode;
+  public void setCourse(Course course) {
+    this.course = course;
+  }
+
+  public List<AttendanceLog> getAttendanceLogs() {
+    return attendanceLogs;
+  }
+
+  public void setAttendanceLogs(List<AttendanceLog> attendanceLogs) {
+    this.attendanceLogs = attendanceLogs;
   }
 
   public String getDate() {

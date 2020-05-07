@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Result {
@@ -11,32 +12,41 @@ public class Result {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
-
-  private String studentCode, courseCode;
+  @ManyToOne
+  private Student student;
+  @ManyToOne
+  private Course course;
   private String grade = "";
-  private transient String name;
 
   public Result() {
   }
 
-  public Result(String studentCode, String courseCode, String grade) {
-    this.studentCode = studentCode;
-    this.courseCode = courseCode;
+  public Result(Student student, Course course, String grade) {
+    this.student = student;
+    this.course = course;
     this.grade = grade;
   }
 
-  public Result(String studentCode, String courseCode, int grade) {
-    this.studentCode = studentCode;
-    this.courseCode = courseCode;
+  public Result(Student student, Course course, int grade) {
+    this.student = student;
+    this.course = course;
     this.grade = String.valueOf(grade);
   }
 
-  public String getName() {
-    return name;
+  public Student getStudent() {
+    return student;
   }
 
-  public void setName(String name) {
-    this.name = name;
+  public void setStudent(Student student) {
+    this.student = student;
+  }
+
+  public Course getCourse() {
+    return course;
+  }
+
+  public void setCourse(Course course) {
+    this.course = course;
   }
 
   public int getId() {
@@ -45,22 +55,6 @@ public class Result {
 
   public void setId(int id) {
     this.id = id;
-  }
-
-  public String getStudentCode() {
-    return studentCode;
-  }
-
-  public void setStudentCode(String studentCode) {
-    this.studentCode = studentCode;
-  }
-
-  public String getCourseCode() {
-    return courseCode;
-  }
-
-  public void setCourseCode(String courseCode) {
-    this.courseCode = courseCode;
   }
 
   public String getGrade() {

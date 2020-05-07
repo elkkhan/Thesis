@@ -1,8 +1,10 @@
 package com.thesis.neptun.controller;
 
+import com.thesis.neptun.exception.InvalidGradeException;
 import com.thesis.neptun.main.MainWindow;
-import com.thesis.neptun.model.Message;
 import com.thesis.neptun.model.Result;
+import com.thesis.neptun.model.User;
+import com.thesis.neptun.util.NeptunUtils;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.TimeZone;
@@ -10,10 +12,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import javax.persistence.NoResultException;
+import javax.persistence.EntityManager;
 
 public class ModifyGradeController implements Initializable {
 
+  private User teacher = MainWindowController.getLoggedInUser();
+  private EntityManager em = MainWindow.entityManager;
   @FXML
   private TextField studentName;
   @FXML
@@ -23,79 +27,57 @@ public class ModifyGradeController implements Initializable {
 
   @Override
   public void initialize(URL url, ResourceBundle rb) {
-    selectedResult = StudentListController.getSelectedResult();
+    selectedResult = CourseResultListController.getSelectedResult();
     TimeZone.setDefault(TimeZone.getTimeZone("Europe/Budapest"));
     studentName.setDisable(true);
-    studentName.setText(selectedResult.getName());
+    studentName.setText(selectedResult.getStudent().getName());
     grade.setText(selectedResult.getGrade());
+  }
+
+  private void changeGrade(EntityManager em, String grade, Result result)
+      throws InvalidGradeException {
+    try {
+      if (Integer.parseInt(grade) < 1 || Integer.parseInt(grade) > 5) {
+        throw new InvalidGradeException("Grade must be between 1 and 5 inclusive.");
+      }
+    } catch (NumberFormatException e) {
+      throw new InvalidGradeException("Invalid input, please enter a valid grade.");
+    }
+    em.getTransaction().begin();
+    result.setGrade(grade);
+    if (!result.getStudent().getResults().contains(result)) {
+      result.getStudent().getResults().add(result);
+      result.getCourse().getResults().add(result);
+      em.persist(result);
+    }
+    em.getTransaction().commit();
   }
 
   @FXML
   public void handleSaveGradeButtonAction() {
+    if(!selectedResult.getGrade().equals("None"))
+      em.refresh(selectedResult);
     try {
-      if (Integer.parseInt(grade.getText()) < 1 || Integer.parseInt(grade.getText()) > 5) {
-        MainWindow.displayMessage("Neptun System", "Grade must be between 1 and 5 inclusive.");
-        grade.clear();
-        return;
-      }
-    } catch (NumberFormatException e) {
-      MainWindow.displayMessage("Neptun System", "Invalid input, please enter a valid grade.");
+      changeGrade(em, grade.getText(), selectedResult);
+      String messageText =
+          "Grade '"
+              + grade.getText()
+              + "' has been submitted by "
+              + selectedResult.getCourse().getTeacher().getName()
+              + " for subject "
+              + selectedResult.getCourse().getName()
+              + "\n\n\n"
+              + "This is an automatically generated mail, please do not reply to it.";
+      String subject = "Grade changed for " + selectedResult.getCourse().getName();
+      ComposeMessageWindowController
+          .sendMessage(em, teacher, selectedResult.getStudent(), subject, messageText);
+
+    } catch (InvalidGradeException e) {
+      NeptunUtils.displayMessage("Neptun System", e.getMessage());
       grade.clear();
-      return;
     }
-
-    MainWindow.entityManager.getTransaction().begin();
-    String subjectName =
-        (String)
-            MainWindow.entityManager
-                .createNativeQuery(
-                    "select name from course where coursecode = \""
-                        + selectedResult.getCourseCode()
-                        + "\"")
-                .getSingleResult();
-    String senderEmail = MainWindowController.getLoggedInUser().getEmail();
-    String receiverEmail =
-        (String)
-            MainWindow.entityManager
-                .createNativeQuery(
-                    "select email from student where code = \""
-                        + selectedResult.getStudentCode()
-                        + "\"")
-                .getSingleResult();
-    String messageText =
-        "Grade '"
-            + grade.getText()
-            + "' has been submitted by "
-            + MainWindowController.getLoggedInUser().getName()
-            + " for subject "
-            + subjectName
-            + "\n\n\n"
-            + "This is an automatically generated mail, please do not reply to it.";
-    String subject = "Grade changed for " + subjectName;
-    Message message = new Message(senderEmail, receiverEmail, messageText, subject);
-    MainWindow.entityManager.persist(message);
-
-    String query =
-        "select id from Result where studentcode = \""
-            + selectedResult.getStudentCode()
-            + "\" and "
-            + "coursecode = \""
-            + selectedResult.getCourseCode()
-            + "\"";
-    Result result;
-    try {
-      int id = (int) MainWindow.entityManager.createNativeQuery(query).getSingleResult();
-      result = MainWindow.entityManager.find(Result.class, id);
-      result.setGrade(grade.getText());
-    } catch (NoResultException e) {
-      result =
-          new Result(
-              selectedResult.getStudentCode(), selectedResult.getCourseCode(), grade.getText());
-    }
-    MainWindow.entityManager.persist(result);
-    MainWindow.entityManager.getTransaction().commit();
-    MainWindow.displayMessage("Neptun System", "Grade changed to " + grade.getText());
+    NeptunUtils.displayMessage("Neptun System", "Grade changed to " + grade.getText());
     ((Stage) grade.getScene().getWindow()).close();
-    MainWindow.loadWindow("/StudentList.fxml", "Student count");
+    NeptunUtils.loadWindow("/StudentList.fxml", "Student count");
   }
 }

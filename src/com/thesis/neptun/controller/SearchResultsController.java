@@ -5,6 +5,7 @@ import com.thesis.neptun.model.Student;
 import com.thesis.neptun.model.Teacher;
 import com.thesis.neptun.model.User;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.TimeZone;
@@ -16,10 +17,12 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 
 public class SearchResultsController implements Initializable {
 
+  private EntityManager em = MainWindow.entityManager;
   private User loggedInUser = MainWindowController.getLoggedInUser();
   @FXML
   private TableView<User> tableView;
@@ -44,50 +47,40 @@ public class SearchResultsController implements Initializable {
 
   @SuppressWarnings("unchecked")
   private ObservableList<User> getUserList() {
-    String loggedInNeptun = loggedInUser.getCode();
+    ObservableList<User> users = FXCollections.observableArrayList();
+    users.addAll(getSearchResults(em, receiverData));
+    return users;
+  }
 
+  private List<User> getSearchResults(EntityManager em, String receiverData) {
     String query =
-        "select code from (select code, name, email  from student union \n"
-            + "select code, name, email  from teacher \n"
-            + "order by name) as t where not(t.code=\""
-            + loggedInNeptun
-            + "\") and (t.name like \"%"
+        "select id from (select id, code, name, email  from student union \n"
+            + "select id, code, name, email  from teacher \n"
+            + "order by name) as t where (t.name like \"%"
             + receiverData
             + "%\" or email like \"%"
             + receiverData
             + "%\" or code like \"%"
             + receiverData
             + "%\")";
-
-    ObservableList<User> users = FXCollections.observableArrayList();
-
-    List<String> neptunList = MainWindow.entityManager.createNativeQuery(query).getResultList();
-
-    for (String x : neptunList) {
+    List<Integer> matchedIds = em.createNativeQuery(query).getResultList();
+    List<User> matchedUsers = new ArrayList<>();
+    for (Integer id : matchedIds) {
       User user;
       try {
-        user =
-            (User)
-                MainWindow.entityManager
-                    .createNativeQuery(
-                        "select * from student where code = \"" + x + "\"", Student.class)
-                    .getSingleResult();
+        user = (User) em.find(Student.class, id);
       } catch (NoResultException e) {
-        user =
-            (User)
-                MainWindow.entityManager
-                    .createNativeQuery(
-                        "select * from teacher where code = \"" + x + "\"", Teacher.class)
-                    .getSingleResult();
+        user = (User) em.find(Teacher.class, id);
       }
-      users.add(user);
+      matchedUsers.add(user);
     }
-    return users;
+    return matchedUsers;
   }
+
 
   public void handleSelectButtonAction() {
     ComposeMessageWindowController.getBackReceiverData(
-        tableView.getSelectionModel().getSelectedItem().getEmail());
+        tableView.getSelectionModel().getSelectedItem());
     ((Stage) tableView.getScene().getWindow()).close();
   }
 }

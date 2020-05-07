@@ -1,7 +1,7 @@
 package com.thesis.neptun.controller;
 
-import com.thesis.neptun.main.MainWindow;
 import com.thesis.neptun.model.Message;
+import com.thesis.neptun.util.NeptunUtils;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.TimeZone;
@@ -32,7 +32,7 @@ public class OpenMessageController implements Initializable {
     TimeZone.setDefault(TimeZone.getTimeZone("Europe/Budapest"));
     message = InboxWindowController.getOpenedMessage();
     messageField.setText(message.getMessage());
-    sender.setText(message.getSenderName());
+    sender.setText(message.getSender().getName());
     subject.setText(message.getSubject());
     date.setText(message.getDate());
 
@@ -46,24 +46,23 @@ public class OpenMessageController implements Initializable {
     try {
       TimeZone.setDefault(TimeZone.getTimeZone("Europe/Budapest"));
       Stage stage = new Stage();
-
       FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ComposeMessageWindow.fxml"));
-
       Parent root = fxmlLoader.load();
-
       Scene scene = new Scene(root);
       stage.setTitle("Reply to " + sender.getText());
       stage.setScene(scene);
       stage.setResizable(false);
       ComposeMessageWindowController controller = fxmlLoader.getController();
-      controller.setReplyData(message.getSenderEmail(), "Re:" + subject.getText());
+      controller.setReplyData(message.getSender().getEmail(), "Re:" + subject.getText());
       stage.show();
-    } catch (Exception ignore) {}
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 
   @FXML
   public void handleBackButtonAction() {
     ((Stage) sender.getScene().getWindow()).close();
-    MainWindow.loadWindow("/InboxWindow.fxml", "Inbox");
+    NeptunUtils.loadWindow("/InboxWindow.fxml", "Inbox");
   }
 }

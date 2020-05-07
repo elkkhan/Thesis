@@ -1,11 +1,14 @@
 package com.thesis.neptun.controller;
 
+import com.thesis.neptun.exception.AttendanceException;
+import com.thesis.neptun.exception.NoRowSelectedException;
 import com.thesis.neptun.main.MainWindow;
 import com.thesis.neptun.model.AttendanceLog;
 import com.thesis.neptun.model.ClassLog;
 import com.thesis.neptun.model.Course;
+import com.thesis.neptun.model.Student;
+import com.thesis.neptun.util.NeptunUtils;
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
 import java.util.TimeZone;
 import javafx.beans.property.ReadOnlyStringWrapper;
@@ -19,12 +22,12 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
 
 @SuppressWarnings("unchecked")
 public class StudentAttendancePanelController implements Initializable {
 
   private EntityManager em = MainWindow.entityManager;
+  private Student student = (Student) MainWindowController.getLoggedInUser();
   private Course selectedCourse = StudentPanelController.getSelectedCourse();
   @FXML
   private Button attend;
@@ -54,7 +57,7 @@ public class StudentAttendancePanelController implements Initializable {
     });
     date.setCellValueFactory(data -> new ReadOnlyStringWrapper(data.getValue().getDate()));
     attended.setCellValueFactory(data -> {
-      if (hasAttended(data.getValue(), MainWindowController.getLoggedInUser().getCode())) {
+      if (hasAttended(data.getValue(), student)) {
         return new ReadOnlyStringWrapper("Yes");
       }
       return new ReadOnlyStringWrapper("No");
@@ -63,77 +66,63 @@ public class StudentAttendancePanelController implements Initializable {
     tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
   }
 
-  private double getAttendancePercentage() {
-    String queryTotalClasses =
-        "select count(*) from classlog where coursecode = \"" + selectedCourse.getCourseCode()
-            + "\"";
-    int totalClasses = ((Long) em.createNativeQuery(queryTotalClasses).getSingleResult())
-        .intValue();
-    String queryTotalAttendances =
-        "select count(*) from attendancelog where studentcode = \"" + MainWindowController
-            .getLoggedInUser().getCode() + "\" and coursecode =\"" + selectedCourse.getCourseCode()
-            + "\"";
-    int totalAttendances = ((Long) em.createNativeQuery(queryTotalAttendances).getSingleResult())
-        .intValue();
-    return Math.round((double) totalAttendances / (double) totalClasses * 100);
-  }
-
   private void constructTableView() {
-    tableView.setItems(getClassLogs());
+    em.refresh(selectedCourse);
+    ObservableList<ClassLog> classLogs = FXCollections.observableArrayList();
+    classLogs.addAll(selectedCourse.getClassLogs());
+    tableView.setItems(classLogs);
     tableView.getColumns().clear();
     tableView.getColumns().addAll(attendanceWindow, date, attended);
-    percentage.setText("Overall attendance: " + getAttendancePercentage() + "%");
+    percentage.setText(
+        "Overall attendance: " + NeptunUtils.getAttendancePercentage(selectedCourse, student)
+            + "%");
   }
 
   @FXML
   public void handleAttendButtonAction() {
-    ClassLog cl = tableView.getSelectionModel().getSelectedItem();
-    if (cl == null) {
-      MainWindow.displayMessage("No selection", "Please select a class.");
-      return;
+    try {
+      ClassLog cl = tableView.getSelectionModel().getSelectedItem();
+      if (cl == null) {
+        throw new NoRowSelectedException("Please select a class.");
+      }
+      attendClass(em, cl, student);
+      constructTableView();
+      NeptunUtils.displayMessage("OK", "Attendance marked.");
+    } catch (NoRowSelectedException e) {
+      NeptunUtils.displayMessage("No selection", e.getMessage());
+    } catch (AttendanceException e) {
+      NeptunUtils.displayMessage("Attendance error", e.getMessage());
     }
-    String courseCode = cl.getCourseCode();
-    String studentCode = MainWindowController.getLoggedInUser().getCode();
-    System.out.println(cl);
+  }
+
+  private void attendClass(EntityManager em, ClassLog cl, Student student)
+      throws AttendanceException {
     if (cl.isAttendanceWindowClosed()) {
-      MainWindow.displayMessage("Attendance window not open",
-          "Cannot register attendance outside of attendance period.");
-      return;
-    } else if (hasAttended(cl, studentCode)) {
-      MainWindow.displayMessage("Already registered", "Attendance already marked.");
-      return;
+      throw new AttendanceException("Cannot register attendance outside of attendance period.");
+    } else if (hasAttended(cl, student)) {
+      throw new AttendanceException("Attendance already marked.");
     }
-    AttendanceLog al = new AttendanceLog(cl, courseCode, studentCode);
+    AttendanceLog al = new AttendanceLog(cl, student);
     em.getTransaction().begin();
+    student.getAttendanceLogs().add(al);
+    cl.getAttendanceLogs().add(al);
     em.persist(al);
     em.getTransaction().commit();
-    constructTableView();
-    MainWindow.displayMessage("OK", "Attendance marked.");
   }
 
-  private ObservableList<ClassLog> getClassLogs() {
-    em.clear();
-    ObservableList<ClassLog> courses = FXCollections.observableArrayList();
-    String q =
-        "select * from classlog where coursecode = \"" + StudentPanelController.getSelectedCourse()
-            .getCourseCode() + "\"";
-    Query query = em.createNativeQuery(q, ClassLog.class);
-    List<ClassLog> classLogs = query.getResultList();
-    courses.addAll(classLogs);
-    return courses;
-  }
-
-  private boolean hasAttended(ClassLog cl, String studentCode) {
-    String query =
-        "select count(*) from attendancelog where classlog_id=" + cl.getId() + " and studentcode=\""
-            + studentCode + "\"";
-    return (long) em.createNativeQuery(query).getSingleResult() != 0;
+  private boolean hasAttended(ClassLog cl, Student student) {
+    for (AttendanceLog attendanceLog : student.getAttendanceLogs()) {
+      if (cl.getAttendanceLogs().contains(attendanceLog)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   @FXML
   public void handleBackButtonAction() {
     ((Stage) attend.getScene().getWindow()).close();
-    MainWindow.loadWindow("/StudentPanel.fxml", "Student Panel");
+    NeptunUtils.loadWindow("/StudentPanel.fxml", "Student Panel");
   }
 
   @FXML

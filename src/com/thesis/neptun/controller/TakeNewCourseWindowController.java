@@ -1,9 +1,11 @@
 package com.thesis.neptun.controller;
 
+import com.thesis.neptun.exception.NoRowSelectedException;
 import com.thesis.neptun.main.MainWindow;
 import com.thesis.neptun.model.Course;
 import com.thesis.neptun.model.Student;
 import com.thesis.neptun.model.User;
+import com.thesis.neptun.util.NeptunUtils;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -20,10 +22,12 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import javax.persistence.EntityManager;
 
 @SuppressWarnings(value = "unchecked")
 public class TakeNewCourseWindowController implements Initializable {
 
+  private EntityManager em = MainWindow.entityManager;
   private User loggedInUser = MainWindowController.getLoggedInUser();
   @FXML
   private TableView<Course> tableView;
@@ -36,23 +40,19 @@ public class TakeNewCourseWindowController implements Initializable {
   @FXML
   private TableColumn<Course, String> startTime;
 
-  static ObservableList<Course> getCourses(String query) {
+  private ObservableList<Course> getNotTakenCourseList(EntityManager em, Student student) {
+    String query =
+        "select * from course where id not in (select courses_id from course_student where students_id"
+            + " = "
+            + student.getId()
+            + ")";
     ObservableList<Course> courses = FXCollections.observableArrayList();
     List<Course> courseList =
-        MainWindow.entityManager.createNativeQuery(query, Course.class).getResultList();
+        em.createNativeQuery(query, Course.class).getResultList();
     for (Course x : courseList) {
       courses.add(x);
     }
     return courses;
-  }
-
-  private ObservableList<Course> getCourseList() {
-    String query =
-        "select * from course where id not in (select courses_id from course_student where students_id"
-            + " = "
-            + loggedInUser.getId()
-            + ")";
-    return getCourses(query);
   }
 
   @Override
@@ -62,7 +62,7 @@ public class TakeNewCourseWindowController implements Initializable {
     name.setCellValueFactory(new PropertyValueFactory<>("name"));
     credits.setCellValueFactory(new PropertyValueFactory<>("credit"));
     startTime.setCellValueFactory(new PropertyValueFactory<>("startTime"));
-    tableView.setItems(getCourseList());
+    tableView.setItems(getNotTakenCourseList(em, (Student) loggedInUser));
     tableView.getColumns().clear();
     tableView.getColumns().addAll(code, name, credits, startTime);
     tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -73,7 +73,7 @@ public class TakeNewCourseWindowController implements Initializable {
     try {
       Course selectedCourse = tableView.getSelectionModel().getSelectedItem();
       if (selectedCourse == null) {
-        throw new NullPointerException();
+        throw new NoRowSelectedException("Please select a subject!");
       }
       Alert alert =
           new Alert(
@@ -83,24 +83,27 @@ public class TakeNewCourseWindowController implements Initializable {
               ButtonType.YES);
       alert.showAndWait();
       if (alert.getResult() == ButtonType.YES) {
-        Student student = (Student) loggedInUser;
-        MainWindow.entityManager.getTransaction().begin();
-        student.getCourses().add(selectedCourse);
-        selectedCourse.getStudents().add(student);
-        MainWindow.entityManager.getTransaction().commit();
-        MainWindow.displayMessage(
+        takeCourse(em, (Student) loggedInUser, selectedCourse);
+        NeptunUtils.displayMessage(
             "Neptun System", "Subject " + selectedCourse.getName() + " successfuly taken" + ".");
         ((Stage) tableView.getScene().getWindow()).close();
-        MainWindow.loadWindow("/StudentPanel.fxml", "Student Panel");
+        NeptunUtils.loadWindow("/StudentPanel.fxml", "Student Panel");
       }
-    } catch (NullPointerException e) {
-      MainWindow.displayMessage("Neptun System", "Please select a subject!");
+    } catch (NoRowSelectedException e) {
+      NeptunUtils.displayMessage("Neptun System", e.getMessage());
     }
+  }
+
+  private void takeCourse(EntityManager em, Student student, Course course) {
+    em.getTransaction().begin();
+    student.getCourses().add(course);
+    course.getStudents().add(student);
+    em.getTransaction().commit();
   }
 
   @FXML
   public void handleBackButtonAction(ActionEvent event) {
     ((Stage) tableView.getScene().getWindow()).close();
-    MainWindow.loadWindow("/StudentPanel.fxml", "Student Panel");
+    NeptunUtils.loadWindow("/StudentPanel.fxml", "Student Panel");
   }
 }

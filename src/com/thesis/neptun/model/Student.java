@@ -1,20 +1,24 @@
 package com.thesis.neptun.model;
 
-import com.thesis.neptun.main.MainWindow;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
-import javax.persistence.NoResultException;
+import javax.persistence.OneToMany;
 
 
 @Entity
 public class Student extends User {
 
   private transient String grade = "";
-
   @ManyToMany(mappedBy = "students")
-  private List<Course> courses = new ArrayList<>();
+  private Set<Course> courses = new HashSet<>();
+  @OneToMany(mappedBy = "student",cascade = CascadeType.ALL)
+  private List<AttendanceLog> attendanceLogs;
+  @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
+  private List<Result> results;
 
   public Student() {
   }
@@ -23,8 +27,28 @@ public class Student extends User {
     super(password, salt, code, name, email);
   }
 
-  public List<Course> getCourses() {
+  public List<Result> getResults() {
+    return results;
+  }
+
+  public void setResults(List<Result> result) {
+    this.results = result;
+  }
+
+  public List<AttendanceLog> getAttendanceLogs() {
+    return attendanceLogs;
+  }
+
+  public void setAttendanceLogs(List<AttendanceLog> attendanceLogs) {
+    this.attendanceLogs = attendanceLogs;
+  }
+
+  public Set<Course> getCourses() {
     return courses;
+  }
+
+  public void setCourses(Set<Course> courses) {
+    this.courses = courses;
   }
 
   public void addCourses(Course... courses) {
@@ -39,23 +63,6 @@ public class Student extends User {
     return "Student [name=" + getName() + ", email=" + getEmail() + "]";
   }
 
-  public void setGradeDb(String courseCode) {
-    try {
-      this.grade =
-          (String)
-              MainWindow.entityManager
-                  .createNativeQuery(
-                      "select grade from Result where coursecode=\""
-                          + courseCode
-                          + "\" and studentcode=\""
-                          + getCode()
-                          + "\"")
-                  .getSingleResult();
-    }catch (NoResultException e) {
-      this.grade = "";
-    }
-  }
-
   public String getGrade() {
     return grade;
   }
@@ -63,4 +70,6 @@ public class Student extends User {
   public void setGrade(String grade) {
     this.grade = grade;
   }
+
+
 }

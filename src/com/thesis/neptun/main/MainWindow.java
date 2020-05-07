@@ -21,29 +21,6 @@ public class MainWindow extends Application {
     launch(args);
   }
 
-  public static void displayMessage(String title, String context) {
-    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-    alert.setTitle(title);
-    alert.setHeaderText("Neptun System");
-    alert.setContentText(context);
-    alert.showAndWait();
-  }
-
-  public static void loadWindow(String fxmlPath, String title) {
-    try {
-      TimeZone.setDefault(TimeZone.getTimeZone("Europe/Budapest"));
-      Stage stage = new Stage();
-      Parent root = FXMLLoader.load(MainWindow.class.getResource(fxmlPath));
-      Scene scene = new Scene(root);
-      stage.setTitle(title);
-      stage.setScene(scene);
-      stage.setResizable(false);
-      stage.show();
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
-
   @Override
   public void start(Stage stage) throws IOException {
     Parent root = FXMLLoader.load(MainWindow.class.getResource("/MainWindow.fxml"));

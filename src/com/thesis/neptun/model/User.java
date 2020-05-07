@@ -1,21 +1,27 @@
 package com.thesis.neptun.model;
 
 import com.thesis.neptun.main.MainWindow;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.OneToMany;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class User extends MainWindow {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.TABLE)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
-
+  @OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL)
+  private List<Message> inbound;
+  @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL)
+  private List<Message> outbound;
   private byte[] password, salt;
   private String code, name, email;
 
@@ -28,6 +34,22 @@ public abstract class User extends MainWindow {
     this.code = code;
     this.name = name;
     this.email = email;
+  }
+
+  public List<Message> getOutbound() {
+    return outbound;
+  }
+
+  public void setOutbound(List<Message> outbound) {
+    this.outbound = outbound;
+  }
+
+  public List<Message> getInbound() {
+    return inbound;
+  }
+
+  public void setInbound(List<Message> messageList) {
+    this.inbound = messageList;
   }
 
   public String getName() {
