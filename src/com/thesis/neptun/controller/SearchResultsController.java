@@ -16,6 +16,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javax.persistence.EntityManager;
 
+@SuppressWarnings("unchecked")
 public class SearchResultsController implements Initializable {
 
   private EntityManager em = MainWindow.entityManager;
@@ -29,7 +30,6 @@ public class SearchResultsController implements Initializable {
 
   private String receiverData = ComposeMessageWindowController.getReceiverSearchKeyword();
 
-  @SuppressWarnings("unchecked")
   @Override
   public void initialize(URL url, ResourceBundle rb) {
     TimeZone.setDefault(TimeZone.getTimeZone("Europe/Budapest"));
@@ -41,7 +41,6 @@ public class SearchResultsController implements Initializable {
     tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
   }
 
-  @SuppressWarnings("unchecked")
   private ObservableList<User> getUserList() {
     ObservableList<User> users = FXCollections.observableArrayList();
     users.addAll(getSearchResults(em, receiverData));
@@ -56,8 +55,8 @@ public class SearchResultsController implements Initializable {
             + receiverData
             + "%\" or code like \"%"
             + receiverData
-            + "%\") and id!="+loggedInUser.getId();
-    List<User> matchedUsers = em.createNativeQuery(query,User.class).getResultList();
+            + "%\") and id!=" + loggedInUser.getId();
+    List<User> matchedUsers = em.createNativeQuery(query, User.class).getResultList();
     return matchedUsers;
   }
 

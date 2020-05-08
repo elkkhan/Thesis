@@ -6,7 +6,7 @@ Students can take/drop courses, mark attendance for classes and check their grad
 Users can use messaging within the program.
 
 ## Building
-Repository includes the Gradle Wrapper. 
+Repository includes the Gradle Wrapper.
 ### Steps for building:
 ```
 git clone https://github.com/elkkhan/Thesis/
@@ -40,10 +40,10 @@ Predefined users in the database that can be used for testing:
    Password: **bobthomas@1A**
 3) Login: **PHIL01**
    Password: **philleotardo@1A**
-   
+
  ## Backend
-MySQL is used for all of the backend. 
-It is stored on a free-tier AWS EC2, so the connection might be slow.
+MySQL is used for all of the backend.
+It is stored on a free-tier Azure MYSQL server, so the connection might be slow.
 To change the backend database, edit JDBC related entries in **resources/META-INF/persistence.xml**
 
 **com.thesis.neptun.main.DatabaseFiller** class can be used to initialize tables with sample data
