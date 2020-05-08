@@ -133,6 +133,7 @@ public class TeacherPanelController extends MainWindowController implements Init
         em.remove(al);
       }
     }
+    em.flush();
     em.remove(course);
     em.getTransaction().commit();
   }

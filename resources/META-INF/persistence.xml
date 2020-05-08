@@ -21,6 +21,7 @@
 			<property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
 			<property name="eclipselink.logging.level" value="FINE"/>
 			<property name="eclipselink.ddl-generation" value="create-tables"/>
+			<property name="eclipselink.query-results-cache" value="false"/>
 		</properties>
 
 	</persistence-unit>

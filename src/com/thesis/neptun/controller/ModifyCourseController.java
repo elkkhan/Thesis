@@ -47,7 +47,7 @@ public class ModifyCourseController implements Initializable {
     try {
       Course modifiedCourse = CreateCourseController
           .constructCourse(em, nameModify.getText(), codeModify.getText(), teacher,
-              creditModify.getText(), startTimeModify.getText(), timeoutMinutes.getText());
+              creditModify.getText(), startTimeModify.getText(), timeoutMinutes.getText(),true);
       modifyCourse(em, selectedCourse, modifiedCourse);
     } catch (InvalidCourseException e) {
       NeptunUtils.displayMessage("Invalid course", e.getMessage());

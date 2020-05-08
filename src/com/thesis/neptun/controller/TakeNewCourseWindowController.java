@@ -41,6 +41,7 @@ public class TakeNewCourseWindowController implements Initializable {
   private TableColumn<Course, String> startTime;
 
   private ObservableList<Course> getNotTakenCourseList(EntityManager em, Student student) {
+
     String query =
         "select * from course where id not in (select course_id from course_student where student_id"
             + " = "

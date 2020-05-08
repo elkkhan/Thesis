@@ -24,7 +24,7 @@ public class CreateCourseController implements Initializable {
 
   public static Course constructCourse(EntityManager em, String name, String code, Teacher teacher,
       String credits,
-      String start_time, String timeoutMinutes) throws InvalidCourseException {
+      String start_time, String timeoutMinutes, boolean modifying) throws InvalidCourseException {
 
     try {
       String countQuery =
@@ -39,7 +39,7 @@ public class CreateCourseController implements Initializable {
       } else if (NeptunUtils.isInvalidCourseStartTime(start_time) || start_time.length() != 5) {
         throw new InvalidCourseException(
             "Invalid time format.\nStart time must be in hh:mm format.");
-      } else if (subjCount > 0) {
+      } else if (subjCount > 0 && !modifying) {
         throw new InvalidCourseException(
             "A subject with course code " + code + " alerady " + "exists.");
       } else if (Integer.parseInt(timeoutMinutes) > 120) {
@@ -75,7 +75,7 @@ public class CreateCourseController implements Initializable {
   public void handleCreateCourseButtonAction() {
     try {
       Course course = constructCourse(em, name.getText(), code.getText(), (Teacher) loggedInUser,
-          credits.getText(), start_time.getText(), timeoutMinutes.getText());
+          credits.getText(), start_time.getText(), timeoutMinutes.getText(),false);
       createCourse(course);
     } catch (InvalidCourseException e) {
       NeptunUtils.displayMessage("Invalid course", e.getMessage());
