@@ -23,6 +23,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javax.persistence.EntityManager;
+import org.eclipse.persistence.config.CacheUsage;
+import org.eclipse.persistence.config.QueryHints;
 
 @SuppressWarnings(value = "unchecked")
 public class TakeNewCourseWindowController implements Initializable {
@@ -41,7 +43,6 @@ public class TakeNewCourseWindowController implements Initializable {
   private TableColumn<Course, String> startTime;
 
   private ObservableList<Course> getNotTakenCourseList(EntityManager em, Student student) {
-
     String query =
         "select * from course where id not in (select course_id from course_student where student_id"
             + " = "
@@ -49,8 +50,9 @@ public class TakeNewCourseWindowController implements Initializable {
             + ")";
     ObservableList<Course> courses = FXCollections.observableArrayList();
     List<Course> courseList =
-        em.createNativeQuery(query, Course.class).getResultList();
+        em.createNativeQuery(query, Course.class).setHint(QueryHints.CACHE_USAGE, CacheUsage.DoNotCheckCache).getResultList();
     for (Course x : courseList) {
+      em.refresh(x);
       courses.add(x);
     }
     return courses;

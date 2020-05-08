@@ -58,6 +58,7 @@ public class StudentPanelController implements Initializable {
     courseList.addAll(student.getCourses());
     ObservableList<Course> courses = FXCollections.observableArrayList();
     for (Course x : courseList) {
+      em.refresh(x);
       courses.add(x);
     }
     return courses;
