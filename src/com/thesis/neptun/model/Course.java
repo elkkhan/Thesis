@@ -28,7 +28,7 @@ public class Course {
   private int timeoutMinutes;
   @ManyToOne
   private Teacher teacher;
-  @ManyToMany
+  @ManyToMany(mappedBy = "courses")
   private Set<Student> students = new HashSet<>();
   @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
   private List<ClassLog> classLogs;

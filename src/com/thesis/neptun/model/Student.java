@@ -17,10 +17,10 @@ import javax.persistence.OneToMany;
 public class Student extends User {
 
   private transient String grade = "";
-  @ManyToMany(mappedBy = "students")
   @JoinTable(name = "course_student",
       joinColumns = @JoinColumn(name = "student_id"),
       inverseJoinColumns = @JoinColumn(name = "course_id"))
+  @ManyToMany
   private Set<Course> courses = new HashSet<>();
   @OneToMany(mappedBy = "student",cascade = CascadeType.ALL)
   private List<AttendanceLog> attendanceLogs;
