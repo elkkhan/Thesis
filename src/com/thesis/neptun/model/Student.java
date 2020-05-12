@@ -22,7 +22,7 @@ public class Student extends User {
       inverseJoinColumns = @JoinColumn(name = "course_id"))
   @ManyToMany
   private Set<Course> courses = new HashSet<>();
-  @OneToMany(mappedBy = "student",cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
   private List<AttendanceLog> attendanceLogs;
   @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
   private List<Result> results;

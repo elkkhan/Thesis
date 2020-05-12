@@ -26,8 +26,9 @@ sourceSets {
 }
 
 testlogger {
+    theme 'mocha'
     showExceptions true
-    slowThreshold 500
+    slowThreshold 1000
     showSummary true
     showPassed true
     showSkipped true

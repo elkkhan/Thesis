@@ -19,7 +19,7 @@ public class ClassLog {
   private int id;
   @ManyToOne
   private Course course;
-  @OneToMany(mappedBy = "classLog",cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "classLog", cascade = CascadeType.ALL)
   private List<AttendanceLog> attendanceLogs;
   private String date;
   private boolean attendanceWindowClosed;

@@ -1,15 +1,12 @@
 package com.thesis.neptun.model;
 
-import com.thesis.neptun.main.MainWindow;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.TimeZone;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.NoResultException;
 
 @Entity
 public class Message {

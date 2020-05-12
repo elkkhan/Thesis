@@ -13,7 +13,7 @@ public class Teacher extends User {
 
   private String role;
 
-  @OneToMany(mappedBy = "teacher",cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL)
   private List<Course> courses = new ArrayList<>();
 
   public Teacher() {

@@ -24,6 +24,10 @@ public class NeptunUtils {
 
   private static EntityManager em = MainWindow.entityManager;
 
+  public static void setEntityManager(EntityManager entityManager) {
+    em = entityManager;
+  }
+
   public static long countUnreadEmails(User loggedInUser) {
     em.refresh(loggedInUser);
     long count = 0;
@@ -168,5 +172,4 @@ public class NeptunUtils {
       return true;
     }
   }
-
 }

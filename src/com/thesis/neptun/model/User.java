@@ -1,6 +1,5 @@
 package com.thesis.neptun.model;
 
-import com.thesis.neptun.main.MainWindow;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorColumn;
@@ -15,7 +14,7 @@ import javax.persistence.OneToMany;
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "USER_TYPE")
-public abstract class User extends MainWindow {
+public abstract class User {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

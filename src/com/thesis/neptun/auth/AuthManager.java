@@ -1,6 +1,11 @@
 package com.thesis.neptun.auth;
 
+import com.thesis.neptun.main.MainWindow;
+import com.thesis.neptun.model.PasswordPair;
 import com.thesis.neptun.model.Student;
+import com.thesis.neptun.model.Student_;
+import com.thesis.neptun.model.Teacher;
+import com.thesis.neptun.model.Teacher_;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
@@ -9,11 +14,6 @@ import javax.crypto.spec.PBEKeySpec;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import com.thesis.neptun.main.MainWindow;
-import com.thesis.neptun.model.PasswordPair;
-import com.thesis.neptun.model.Student_;
-import com.thesis.neptun.model.Teacher;
-import com.thesis.neptun.model.Teacher_;
 
 public class AuthManager extends MainWindow {
 
