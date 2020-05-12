@@ -33,6 +33,8 @@ Predefined users in the database that can be used for testing:
    Password: **crismoltesanti@1A**
 2) Login: **JACKY01**
    Password: **jackyjunior@1A**
+3) Login: **JADO01**
+   Password: **jadonsancho@1A**
 ### Teachers:
 1) Login: **ROBA01**
    Password: **robertaaron@1A**
