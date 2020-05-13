@@ -7,7 +7,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="595.0" prefWidth="361.0" stylesheets="@../../css/neptun.css" xmlns="http://javafx.com/javafx/9.0.4" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.thesis.neptun.controller.student.TakeNewCourseWindowController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="595.0" prefWidth="361.0" stylesheets="@../../css/venera.css" xmlns="http://javafx.com/javafx/9.0.4" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.thesis.classmgmtsystem.controller.student.TakeNewCourseWindowController">
    <children>
       <ImageView fitHeight="84.0" fitWidth="86.0" layoutX="138.0" layoutY="14.0">
          <image>

@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="595.0" prefWidth="424.0" stylesheets="@../../css/neptun.css" xmlns="http://javafx.com/javafx/9.0.4" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.thesis.neptun.controller.teacher.AttendancePanelController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="595.0" prefWidth="424.0" stylesheets="@../../css/venera.css" xmlns="http://javafx.com/javafx/9.0.4" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.thesis.classmgmtsystem.controller.teacher.AttendancePanelController">
    <children>
       <ImageView fitHeight="90.0" fitWidth="97.0" layoutX="164.0" layoutY="14.0">
          <image>
@@ -20,7 +20,7 @@
       <Button fx:id="refresh" layoutX="323.0" layoutY="14.0" mnemonicParsing="false" onAction="#handleRefreshButtonAction" text="Refresh" />
       <TableView fx:id="tableView" layoutX="40.0" layoutY="164.0" prefHeight="410.0" prefWidth="344.0">
         <columns>
-          <TableColumn fx:id="neptun" prefWidth="78.0" text="Neptun" />
+          <TableColumn fx:id="venera" prefWidth="78.0" text="Venera" />
           <TableColumn fx:id="name" prefWidth="83.0" text="Name" />
             <TableColumn fx:id="present" minWidth="0.0" text="Present" />
             <TableColumn fx:id="percentage" prefWidth="102.0" text="Attendance %" />

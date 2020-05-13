@@ -9,7 +9,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="630.0" prefWidth="412.0" stylesheets="@../../css/neptun.css" xmlns="http://javafx.com/javafx/9.0.4" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.thesis.neptun.controller.teacher.CourseResultListController">
+<AnchorPane maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="630.0" prefWidth="412.0" stylesheets="@../../css/venera.css" xmlns="http://javafx.com/javafx/9.0.4" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.thesis.classmgmtsystem.controller.teacher.CourseResultListController">
    <children>
       <ImageView fitHeight="85.0" fitWidth="89.0" layoutX="166.0" layoutY="14.0">
          <image>
@@ -18,7 +18,7 @@
       </ImageView>
       <TableView fx:id="tableView" layoutX="23.0" layoutY="156.0" prefHeight="424.0">
         <columns>
-          <TableColumn fx:id="neptun" prefWidth="82.0" text="Neptun" />
+          <TableColumn fx:id="veneraId" prefWidth="82.0" text="Venera ID" />
           <TableColumn fx:id="name" prefWidth="131.0" text="Name" />
             <TableColumn fx:id="grade" prefWidth="65.0" text="Grade" />
             <TableColumn fx:id="percentage" prefWidth="88.0" text="Attendance %" />

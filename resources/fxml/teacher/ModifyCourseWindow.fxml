@@ -7,7 +7,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="390.0" prefWidth="283.0" stylesheets="@../../css/neptun.css" xmlns="http://javafx.com/javafx/9.0.4" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.thesis.neptun.controller.teacher.ModifyCourseController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="390.0" prefWidth="283.0" stylesheets="@../../css/venera.css" xmlns="http://javafx.com/javafx/9.0.4" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.thesis.classmgmtsystem.controller.teacher.ModifyCourseController">
    <children>
       <ImageView fitHeight="59.0" fitWidth="59.0" layoutX="112.0" layoutY="14.0">
          <image>
@@ -19,7 +19,8 @@
       <TextField fx:id="creditModify" layoutX="58.0" layoutY="214.0" promptText="Number of credits" />
       <TextField fx:id="startTimeModify" layoutX="58.0" layoutY="260.0" promptText="Start time" />
       <Label alignment="CENTER" layoutX="75.0" layoutY="89.0" prefHeight="28.0" prefWidth="133.0" text="Modifying Course" />
-      <Button layoutX="116.0" layoutY="349.0" mnemonicParsing="false" onAction="#handleSaveButtonAction" stylesheets="@../../css/neptun.css" text="Save" />
+      <Button layoutX="116.0" layoutY="349.0" mnemonicParsing="false" onAction="#handleSaveButtonAction" stylesheets="@../../css/venera.css" text="Save" />
       <TextField fx:id="timeoutMinutes" layoutX="52.0" layoutY="303.0" prefHeight="28.0" prefWidth="173.0" promptText="Attendance timeout (minutes)" />
+      <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#handleCancelButtonAction" text="Cancel" />
    </children>
 </AnchorPane>

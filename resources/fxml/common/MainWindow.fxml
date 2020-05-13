@@ -9,7 +9,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="299.0" prefWidth="408.0" stylesheets="@../../css/neptun.css" xmlns="http://javafx.com/javafx/9.0.4" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.thesis.neptun.controller.common.MainWindowController">
+<AnchorPane prefHeight="299.0" prefWidth="408.0" stylesheets="@../../css/venera.css" xmlns="http://javafx.com/javafx/9.0.4" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.thesis.classmgmtsystem.controller.common.MainWindowController">
    <children>
       <TabPane fx:id="tabPane" prefHeight="426.0" prefWidth="546.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
@@ -17,7 +17,7 @@
             <content>
               <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="500.0">
                      <children>
-                        <TextField fx:id="neptun" layoutX="170.0" layoutY="146.0" prefHeight="38.0" prefWidth="198.0" promptText="Neptun Code" />
+                        <TextField fx:id="veneraId" layoutX="170.0" layoutY="146.0" prefHeight="38.0" prefWidth="198.0" promptText="Venera Code" />
                         <PasswordField fx:id="password" layoutX="169.0" layoutY="196.0" prefHeight="37.0" prefWidth="200.0" promptText="Password" />
                         <Button layoutX="222.0" layoutY="244.0" mnemonicParsing="false" onAction="#handleLoginButtonAction" prefHeight="33.0" prefWidth="95.0" text="Login" />
                         <ImageView fitHeight="114.0" fitWidth="115.0" layoutX="212.0" layoutY="14.0">
@@ -39,7 +39,7 @@
                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
                                           <TextField fx:id="registerStudentFullName" layoutX="83.0" layoutY="70.0" promptText="Full Name" />
-                                          <TextField fx:id="registerStudentNeptun" layoutX="260.0" layoutY="70.0" promptText="Neptun Code" />
+                                          <TextField fx:id="registerStudentVenera" layoutX="260.0" layoutY="70.0" promptText="Venera Code" />
                                           <PasswordField fx:id="passwordR" layoutX="82.0" layoutY="131.0" promptText="Password" />
                                           <PasswordField fx:id="passwordR_confirm" layoutX="260.0" layoutY="131.0" promptText="Confirm Password" />
                                           <TextField fx:id="registerStudentEmail" layoutX="166.0" layoutY="181.0" promptText="E-mail" />
@@ -58,7 +58,7 @@
                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
                                           <TextField fx:id="registerTeacherFullName" layoutX="81.0" layoutY="63.0" promptText="Full Name" />
-                                          <TextField fx:id="registerTeacherNeptun" layoutX="273.0" layoutY="63.0" promptText="Neptun Code" />
+                                          <TextField fx:id="registerTeacherVenera" layoutX="273.0" layoutY="63.0" promptText="Venera Code" />
                                           <PasswordField fx:id="passwordRT" layoutX="81.0" layoutY="122.0" promptText="Password" />
                                           <PasswordField fx:id="passwordRT_confirm" layoutX="273.0" layoutY="122.0" promptText="Confirm Password" />
                                           <TextField fx:id="registerTeacherRole" layoutX="81.0" layoutY="185.0" promptText="Role" />

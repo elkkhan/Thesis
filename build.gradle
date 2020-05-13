@@ -2,7 +2,7 @@ plugins {
     id 'java'
     id 'com.adarshr.test-logger' version '2.0.0'
 }
-group 'com.elte.neptun'
+group 'com.thesis.classmgmtsystem'
 version '1.0-SNAPSHOT'
 
 repositories {
@@ -49,7 +49,7 @@ test {
 jar {
     baseName("THESIS")
     manifest {
-        attributes "Main-Class": "com.thesis.neptun.main.MainWindow"
+        attributes "Main-Class": "com.thesis.classmgmtsystem.main.MainWindow"
     }
     from {
         configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }

@@ -4,21 +4,21 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
 
-  <persistence-unit name="neptun">
+  <persistence-unit name="venera">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-    <class>com.thesis.neptun.model.User</class>
-    <class>com.thesis.neptun.model.Teacher</class>
-    <class>com.thesis.neptun.model.Student</class>
-    <class>com.thesis.neptun.model.Course</class>
-    <class>com.thesis.neptun.model.Result</class>
-    <class>com.thesis.neptun.model.Message</class>
-    <class>com.thesis.neptun.model.ClassLog</class>
-    <class>com.thesis.neptun.model.AttendanceLog</class>
+    <class>com.thesis.classmgmtsystem.model.User</class>
+    <class>com.thesis.classmgmtsystem.model.Teacher</class>
+    <class>com.thesis.classmgmtsystem.model.Student</class>
+    <class>com.thesis.classmgmtsystem.model.Course</class>
+    <class>com.thesis.classmgmtsystem.model.Result</class>
+    <class>com.thesis.classmgmtsystem.model.Message</class>
+    <class>com.thesis.classmgmtsystem.model.ClassLog</class>
+    <class>com.thesis.classmgmtsystem.model.AttendanceLog</class>
     <properties>
       <property name="javax.persistence.jdbc.url"
-        value="jdbc:mysql://elkhan-thesis.mysql.database.azure.com:3306/neptun_db?serverTimezone=CET"/>
-      <property name="javax.persistence.jdbc.user" value="neptun_user@elkhan-thesis"/>
-      <property name="javax.persistence.jdbc.password" value="neptun_PWD1"/>
+        value="jdbc:mysql://elkhan-thesis.mysql.database.azure.com:3306/venera_db?serverTimezone=CET"/>
+      <property name="javax.persistence.jdbc.user" value="venera_user@elkhan-thesis"/>
+      <property name="javax.persistence.jdbc.password" value="venera_PWD1"/>
       <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
       <property name="eclipselink.logging.level" value="OFF"/>
       <property name="eclipselink.ddl-generation" value="create-tables"/>
@@ -28,19 +28,19 @@
 
   <persistence-unit name="test">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-    <class>com.thesis.neptun.model.User</class>
-    <class>com.thesis.neptun.model.Teacher</class>
-    <class>com.thesis.neptun.model.Student</class>
-    <class>com.thesis.neptun.model.Course</class>
-    <class>com.thesis.neptun.model.Result</class>
-    <class>com.thesis.neptun.model.Message</class>
-    <class>com.thesis.neptun.model.ClassLog</class>
-    <class>com.thesis.neptun.model.AttendanceLog</class>
+    <class>com.thesis.classmgmtsystem.model.User</class>
+    <class>com.thesis.classmgmtsystem.model.Teacher</class>
+    <class>com.thesis.classmgmtsystem.model.Student</class>
+    <class>com.thesis.classmgmtsystem.model.Course</class>
+    <class>com.thesis.classmgmtsystem.model.Result</class>
+    <class>com.thesis.classmgmtsystem.model.Message</class>
+    <class>com.thesis.classmgmtsystem.model.ClassLog</class>
+    <class>com.thesis.classmgmtsystem.model.AttendanceLog</class>
     <properties>
       <property name="javax.persistence.jdbc.url"
-        value="jdbc:mysql://elkhan-thesis.mysql.database.azure.com:3306/test_neptun_db?serverTimezone=CET"/>
-      <property name="javax.persistence.jdbc.user" value="neptun_user@elkhan-thesis"/>
-      <property name="javax.persistence.jdbc.password" value="neptun_PWD1"/>
+        value="jdbc:mysql://elkhan-thesis.mysql.database.azure.com:3306/test_venera_db?serverTimezone=CET"/>
+      <property name="javax.persistence.jdbc.user" value="venera_user@elkhan-thesis"/>
+      <property name="javax.persistence.jdbc.password" value="venera_PWD1"/>
       <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
       <property name="eclipselink.logging.level" value="OFF"/>
       <property name="eclipselink.ddl-generation" value="drop-and-create-tables"/>

@@ -7,11 +7,11 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="458.0" prefWidth="287.0" stylesheets="@../../css/neptun.css" xmlns="http://javafx.com/javafx/9.0.4" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.thesis.neptun.controller.common.SearchResultsController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="458.0" prefWidth="287.0" stylesheets="@../../css/venera.css" xmlns="http://javafx.com/javafx/9.0.4" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.thesis.classmgmtsystem.controller.common.SearchResultsController">
    <children>
       <TableView fx:id="tableView" layoutX="20.0" layoutY="89.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="309.0">
         <columns>
-          <TableColumn fx:id="neptunSearch" prefWidth="76.0" text="Neptun" />
+          <TableColumn fx:id="veneraSearch" prefWidth="76.0" text="Venera ID" />
           <TableColumn fx:id="emailSearch" prefWidth="172.0" text="Email" />
         </columns>
       </TableView>
