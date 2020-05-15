@@ -36,6 +36,7 @@ public class DatabaseFiller {
   List<Result> results;
 
   public DatabaseFiller(EntityManager em) throws InvalidKeySpecException, NoSuchAlgorithmException {
+    this.em = em;
     AuthManager auth = new AuthManager(em);
     T_ROBERT_AARON = auth.registerTeacher(
         "ROBA01",

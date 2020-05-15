@@ -23,7 +23,6 @@ public class TestClassMgmtSysUtils {
 
   private static DatabaseFiller db = TestMain.TEST_DATABASE_REF;
 
-
   @Test
   void countUnreadEmails() {
     ComposeMessageWindowController
