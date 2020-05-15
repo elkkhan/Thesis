@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 public class TestAuthManager {
 
   private static DatabaseFiller db = TestMain.TEST_DATABASE_REF;
-  private static AuthManager am = new AuthManager();
+  private static AuthManager am = new AuthManager(TestMain.entityManager);
 
   @Test
   void authenticateTeacher() throws InvalidKeySpecException, NoSuchAlgorithmException {

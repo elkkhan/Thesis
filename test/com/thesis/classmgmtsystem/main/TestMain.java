@@ -20,8 +20,8 @@ public class TestMain {
 
   private static DatabaseFiller fillTestDb() {
     try {
-      DatabaseFiller testDatabaseFiller = new DatabaseFiller();
-      testDatabaseFiller.fill(entityManager);
+      DatabaseFiller testDatabaseFiller = new DatabaseFiller(entityManager);
+      testDatabaseFiller.fill();
       return testDatabaseFiller;
     } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
       e.printStackTrace();

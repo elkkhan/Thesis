@@ -13,6 +13,7 @@ import javax.persistence.EntityManager;
 
 public class DatabaseFiller {
 
+  private EntityManager em;
   public Student S_JADON_SANCHO;
   public Student S_JACKY_JUNIOR;
   public Student S_CRIS_MOLTESANTI;
@@ -34,8 +35,8 @@ public class DatabaseFiller {
   public List<Course> courses;
   List<Result> results;
 
-  public DatabaseFiller() throws InvalidKeySpecException, NoSuchAlgorithmException {
-    AuthManager auth = new AuthManager();
+  public DatabaseFiller(EntityManager em) throws InvalidKeySpecException, NoSuchAlgorithmException {
+    AuthManager auth = new AuthManager(em);
     T_ROBERT_AARON = auth.registerTeacher(
         "ROBA01",
         "robertaaron@1A".toCharArray(),
@@ -115,8 +116,8 @@ public class DatabaseFiller {
 
 
   public static void main(String[] args) throws InvalidKeySpecException, NoSuchAlgorithmException {
-    DatabaseFiller databaseFiller = new DatabaseFiller();
-    databaseFiller.fill(MainWindow.entityManager);
+    DatabaseFiller databaseFiller = new DatabaseFiller(MainWindow.entityManager);
+    databaseFiller.fill();
   }
 
   private static <T> void persist(EntityManager em, Class<T> type, List<T> objects) {
@@ -125,7 +126,7 @@ public class DatabaseFiller {
     }
   }
 
-  public void fill(EntityManager em) {
+  public void fill() {
     em.getTransaction().begin();
     persist(em, Teacher.class, teachers);
     persist(em, Student.class, students);

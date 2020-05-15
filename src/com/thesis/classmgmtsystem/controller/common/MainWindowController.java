@@ -32,9 +32,9 @@ public class MainWindowController implements Initializable {
 
   private static userType loggedInUserType = null;
   private static User loggedInUser = null;
-  private static AuthManager auth = new AuthManager();
   public static final String alertTitle = "Class Management System";
   private EntityManager em = MainWindow.entityManager;
+  private AuthManager auth = new AuthManager(em);
   @FXML
   private TextField veneraId;
   @FXML

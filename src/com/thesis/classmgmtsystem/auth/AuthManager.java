@@ -1,8 +1,8 @@
 package com.thesis.classmgmtsystem.auth;
 
-import com.thesis.classmgmtsystem.model.Student;
 import com.thesis.classmgmtsystem.main.MainWindow;
 import com.thesis.classmgmtsystem.model.PasswordPair;
+import com.thesis.classmgmtsystem.model.Student;
 import com.thesis.classmgmtsystem.model.Student_;
 import com.thesis.classmgmtsystem.model.Teacher;
 import com.thesis.classmgmtsystem.model.Teacher_;
@@ -11,6 +11,7 @@ import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
+import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -18,27 +19,32 @@ import javax.persistence.criteria.Root;
 public class AuthManager extends MainWindow {
 
   private static final SecureRandom RAND = new SecureRandom();
+  private EntityManager em;
+
+  public AuthManager(EntityManager em) {
+    this.em = em;
+  }
 
   public boolean authenticateTeacher(String code, char[] password)
       throws NoSuchAlgorithmException, InvalidKeySpecException {
-    CriteriaBuilder cb = MainWindow.entityManager.getCriteriaBuilder();
+    CriteriaBuilder cb = em.getCriteriaBuilder();
     CriteriaQuery<Teacher> teacherQuery = cb.createQuery(Teacher.class);
     Root<Teacher> teacher = teacherQuery.from(Teacher.class);
     teacherQuery.where(cb.equal(teacher.get(Teacher_.code), code));
     teacherQuery.select(teacher);
-    Teacher t = MainWindow.entityManager.createQuery(teacherQuery).getSingleResult();
+    Teacher t = em.createQuery(teacherQuery).getSingleResult();
     byte[] hash = hashPassword(password, t.getSalt());
     return constantTimeEquals(hash, t.getPassword());
   }
 
   public boolean authenticateStudent(String code, char[] password)
       throws NoSuchAlgorithmException, InvalidKeySpecException {
-    CriteriaBuilder cb = MainWindow.entityManager.getCriteriaBuilder();
+    CriteriaBuilder cb = em.getCriteriaBuilder();
     CriteriaQuery<Student> studentQuery = cb.createQuery(Student.class);
     Root<Student> student = studentQuery.from(Student.class);
     studentQuery.where(cb.equal(student.get(Student_.code), code));
     studentQuery.select(student);
-    Student st = MainWindow.entityManager.createQuery(studentQuery).getSingleResult();
+    Student st = em.createQuery(studentQuery).getSingleResult();
     byte[] hash = hashPassword(password, st.getSalt());
     return constantTimeEquals(hash, st.getPassword());
   }
