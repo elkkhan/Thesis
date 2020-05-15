@@ -18,7 +18,7 @@ Linux/Mac:
 ```
 Windows:
 ```
-gradle.bat build
+gradlew.bat build
 ```
 An executable Java file will be generated under **build/libs/Thesis-1.0-SNAPSHOT.jar**
 
