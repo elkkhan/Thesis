@@ -16,9 +16,9 @@
     <class>com.thesis.classmgmtsystem.model.AttendanceLog</class>
     <properties>
       <property name="javax.persistence.jdbc.url"
-        value="jdbc:mysql://elkhan-thesis.mysql.database.azure.com:3306/venera_db?serverTimezone=CET"/>
-      <property name="javax.persistence.jdbc.user" value="venera_user@elkhan-thesis"/>
-      <property name="javax.persistence.jdbc.password" value="venera_PWD1"/>
+        value="jdbc:mysql://localhost:3306/venera_production"/>
+      <property name="javax.persistence.jdbc.user" value="venera_user"/>
+      <property name="javax.persistence.jdbc.password" value="veneraPWD"/>
       <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
       <property name="eclipselink.logging.level" value="OFF"/>
       <property name="eclipselink.ddl-generation" value="create-tables"/>
@@ -38,9 +38,9 @@
     <class>com.thesis.classmgmtsystem.model.AttendanceLog</class>
     <properties>
       <property name="javax.persistence.jdbc.url"
-        value="jdbc:mysql://elkhan-thesis.mysql.database.azure.com:3306/test_venera_db?serverTimezone=CET"/>
-      <property name="javax.persistence.jdbc.user" value="venera_user@elkhan-thesis"/>
-      <property name="javax.persistence.jdbc.password" value="venera_PWD1"/>
+        value="jdbc:mysql://localhost:3306/venera_test"/>
+      <property name="javax.persistence.jdbc.user" value="venera_user"/>
+      <property name="javax.persistence.jdbc.password" value="veneraPWD"/>
       <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
       <property name="eclipselink.logging.level" value="OFF"/>
       <property name="eclipselink.ddl-generation" value="drop-and-create-tables"/>

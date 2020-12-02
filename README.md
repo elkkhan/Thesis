@@ -9,22 +9,24 @@ Users can use messaging within the program.
 Repository includes the Gradle Wrapper.
 ### Steps for building:
 ```
-git clone https://github.com/elkkhan/Thesis/
-cd Thesis
+$ git clone https://github.com/elkkhan/Thesis/
+$ cd Thesis
 ```
 Linux/Mac:
 ```
-./gradlew build
+$ ./gradlew build
 ```
 Windows:
 ```
-gradlew.bat build
+$ gradlew.bat build
 ```
 An executable Java file will be generated under **build/libs/Thesis-1.0-SNAPSHOT.jar**
 
+See **Backend** section down below for database setup info.
+
 ### To run the program:
 ```
-java -jar build/libs/Thesis-1.0-SNAPSHOT.jar
+$ java -jar build/libs/Thesis-1.0-SNAPSHOT.jar
 ```
 ## Credentials
 Predefined users in the database that can be used for testing:
@@ -45,7 +47,10 @@ Predefined users in the database that can be used for testing:
 
  ## Backend
 MySQL is used for all of the backend.
-It is stored on a free-tier Azure MYSQL server, so the connection might be slow.
-To change the backend database, edit JDBC related entries in **resources/META-INF/persistence.xml**
+**db_setup.sql** script should be used to setup a sample backend environment.
+```
+$ mysql -u <root_user> -p < db_setup.sql
+``` 
+To change the backend database, edit JDBC related entries in **resources/META-INF/persistence.xml**.
 
 **com.thesis.classmgmtsystem.main.DatabaseFiller** class can be used to initialize tables with sample data
